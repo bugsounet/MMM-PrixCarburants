@@ -202,7 +202,7 @@ Module.register("MMM-PrixCarburants", {
     switch(noti) {
       case "DOM_OBJECTS_CREATED":
         if (this.config.debug) log = (...args) => { console.log("[CARBURANTS]", ...args) }
-        this.sendSocketNotification("INIT", this.config)
+        setTimeout(() => this.sendSocketNotification("INIT", this.config, 1000*30)
         break
     }
   }
