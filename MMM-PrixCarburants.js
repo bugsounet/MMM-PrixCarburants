@@ -15,6 +15,14 @@ Module.register("MMM-PrixCarburants", {
       "08320",
       "59610",
       "02500"
+    ],
+    Carburants: [
+      1, // Gazole
+      2, // SP95
+      3, // E85
+      4, // GPLc
+      5, // E10
+      6  // SP98
     ]
   },
   requiresVersion: "2.18.0",
