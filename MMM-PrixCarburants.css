@@ -1,0 +1,53 @@
+.CARBURANTS_hidden {
+  display:none !important;
+}
+
+#CARBURANTS_SP95,
+#CARBURANTS_E85,
+#CARBURANTS_GPL,
+#CARBURANTS_E10,
+#CARBURANTS_SP98,
+#CARBURANTS_GAZOLE {
+  display: flex;
+}
+
+#CARBURANTS_SP95_VALUE,
+#CARBURANTS_E85_VALUE,
+#CARBURANTS_GPL_VALUE,
+#CARBURANTS_E10_VALUE,
+#CARBURANTS_SP98_VALUE,
+#CARBURANTS_GAZOLE_VALUE {
+  margin-left: 5px;
+  margin-right: 5px;
+  font-weight: bolder;
+}
+
+#CARBURANTS_ID {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+#CARBURANTS {
+  text-align: left;
+  flex-direction: column;
+  display: flex;
+  font-size: medium;
+}
+
+#CARBURANTS_BG {
+  position: absolute;
+  background-image: url(./data/logo/AUCUNE.png);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
+  filter: blur(10px) opacity(20%) grayscale(30%);
+  width: 100%;
+  height: 90%;
+}
+
+#CARBURANTS_UPDATE {
+  font-size: xx-small;
+  text-align: right;
+}
