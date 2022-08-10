@@ -63,3 +63,7 @@ npm run update
 ## Sources
  * Ce module reprend plus ou moins le meme principe que le plugin [prixcarburants](https://github.com/floman321/prixcarburants) pour jeedom
  * Ce module utilise la meme base de donnée [nationale](https://www.prix-carburants.gouv.fr/)
+
+## Notes:
+ * Afin de ne pas perturber le chargement des autres modules, ce module va mettre environ 30 a 45 secondes pour s'afficher au premier démarrage (démarrage différé)
+ * Une mise à jours automatique est faites toutes les heures
