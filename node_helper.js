@@ -16,6 +16,7 @@ module.exports = NodeHelper.create({
   start: function () {
     this.carburants = []
     this.stationsDB = {}
+    this.departement = []
   },
 
   socketNotificationReceived: function (noti, payload) {
@@ -31,8 +32,15 @@ module.exports = NodeHelper.create({
     this.config = config
     if (this.config.debug) log = (...args) => { console.log("[CARBURANTS]", ...args) }
     if (!this.config.CodePostaux.length) return console.error("[CARBURANTS] Manque CodePostaux !")
+    else console.log("[CARBURANTS] Recherche avec Code Postaux:", this.config.CodePostaux.toString())
     this.createStationsDB()
+    log("Création de la base de données...")
     this.DownloadXML()
+    setInterval(()=> {
+      log("Mise à jour de la base de données...")
+      this.carburants = [] 
+      this.DownloadXML()
+    }, 1000 * 60 * 60)
   },
 
   createDB: function(data) {
@@ -43,15 +51,17 @@ module.exports = NodeHelper.create({
         if (pdv.attributes.cp == code) {
           var ids = {
             id: pdv.attributes.id,
-            ville: null,
-            prix: [],
-            marque: null,
             nom: null,
-            logo: "AUCUNE.png"
+            ville: null,
+            marque: null,
+            logo: "AUCUNE.png",
+            prix: [],
           }
           log("Found id:", pdv.attributes.id)
           this.stationDB.stations.forEach(info => {
             if (pdv.attributes.id == info.id) {
+              log("Ville:", info.commune)
+              ids.ville = info.commune
               log("Marque:", info.marque)
               ids.marque = info.marque
               log("Nom", info.nom)
@@ -60,10 +70,6 @@ module.exports = NodeHelper.create({
             }
           })
           pdv.elements.forEach(info => {
-            if (info.name == "ville") {
-              log("Ville:", info.elements[0].text)
-              ids.ville = info.elements[0].text
-            }
             if (info.name == "prix") {
               log("Prix:", info.attributes)
               ids.prix.push(info.attributes)
@@ -74,7 +80,6 @@ module.exports = NodeHelper.create({
         }
       })
     })
-    //log("DataBase:", this.carburants)    
   },
   
   createStationsDB: function() {
@@ -83,24 +88,33 @@ module.exports = NodeHelper.create({
     }
     this.config.CodePostaux.forEach(code => {
       if (code.startsWith('0')) {
-        console.log(code.substring(2,1))
-        let temp = require('./data/listestations/stations'+code.substring(2,1)+'.json').stations
+        let departement = code.substring(2,1)
+        if (this.departement.indexOf(departement) > -1) return
+        log("Chargement des stations du département 0" + departement)
+        let temp = require('./data/listestations/stations'+departement+'.json').stations
         tempDB.stations = tempDB.stations.concat(temp)
+        this.departement.push(departement)
       }
       else if (code.substring(0,2) == "20") {
-        console.log("Corsica!")
+        let departement = 20
+        if (this.departement.indexOf(departement) > -1) return
+        log("Chargement des stations de la Corsica!")
         let temp1 = require('./data/listestations/stations2A.json').stations
         let temp2 = require('./data/listestations/stations2B.json').stations
         let temp = temp1.concat(temp2)
         tempDB.stations = tempDB.stations.concat(temp)
+        this.departement.push(departement)
       }
       else {
-        console.log(code.substring(0,2))
-        let temp = require('./data/listestations/stations'+code.substring(0,2)+'.json').stations
+        let departement = code.substring(0,2)
+        if (this.departement.indexOf(departement) > -1) return
+        log("Chargement des stations du département " + departement)
+        let temp = require('./data/listestations/stations'+departement+'.json').stations
         tempDB.stations = tempDB.stations.concat(temp)
+        this.departement.push(departement)
       }
     })
-    this.stationDB = tempDB // require('./data/listestations/stations8.json')
+    this.stationDB = tempDB
   },
 
   DownloadXML: function() {
@@ -108,6 +122,7 @@ module.exports = NodeHelper.create({
     .then(data => {
       this.createDB(data)
       log("DataBase:", this.carburants)
+      if (this.carburants.length) this.sendSocketNotification("DATA", this.carburants)
     })
     .catch(function (err) {
       console.error(err)

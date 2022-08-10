@@ -13,8 +13,10 @@ Module.register("MMM-PrixCarburants", {
     debug: true,
     CodePostaux: [
       "08320",
-      "59610",
-      "02500"
+      //"59610",
+      //"02500",
+      //"49600",
+      //"49070"
     ],
     Carburants: [
       1, // Gazole
@@ -23,7 +25,8 @@ Module.register("MMM-PrixCarburants", {
       4, // GPLc
       5, // E10
       6  // SP98
-    ]
+    ],
+    Affiche: 5 // nombre de station a afficher
   },
   requiresVersion: "2.18.0",
 
@@ -63,7 +66,7 @@ Module.register("MMM-PrixCarburants", {
   },
 
   updateData: function(data) {
-
+    log("Data reçu:", data)
   },
 
   prepareDisplay: function() {
