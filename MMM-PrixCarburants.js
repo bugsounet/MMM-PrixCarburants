@@ -59,7 +59,14 @@ Module.register("MMM-PrixCarburants", {
         var gazole = document.createElement("div")
         gazole.id = "CARBURANTS_GAZOLE"
         gazole.className= "CARBURANTS_hidden"
-        gazole.textContent= "Gazole: "
+        prix.appendChild(gazole)
+        var gazoleDot = document.createElement("div")
+        gazoleDot.id = "CARBURANTS_GAZOLE_DOT"
+        gazoleDot.className = "fa fa-circle"
+        gazole.appendChild(gazoleDot)
+        var gazoleName = document.createElement("div")
+        gazoleName.textContent= "Gazole"
+        gazole.appendChild(gazoleName)
         var gazoleValue = document.createElement("div")
         gazoleValue.id = "CARBURANTS_GAZOLE_VALUE"
         gazoleValue.textContent = "-.---"
@@ -67,16 +74,18 @@ Module.register("MMM-PrixCarburants", {
         var gazolePrix = document.createElement("div")
         gazolePrix.textContent = "€/l"
         gazole.appendChild(gazolePrix)
-        var gazoleDot = document.createElement("div")
-        gazoleDot.id = "CARBURANTS_GAZOLE_DOT"
-        gazoleDot.className = "fa fa-circle"
-        gazole.appendChild(gazoleDot)
         prix.appendChild(gazole)
 
         var SP95 = document.createElement("div")
         SP95.id = "CARBURANTS_SP95"
         SP95.className= "CARBURANTS_hidden"
-        SP95.textContent= "SP95: "
+        var SP95Dot = document.createElement("div")
+        SP95Dot.id = "CARBURANTS_SP95_DOT"
+        SP95Dot.className = "fa fa-circle"
+        SP95.appendChild(SP95Dot)
+        var SP95Name = document.createElement("div")
+        SP95Name.textContent= "SP95"
+        SP95.appendChild(SP95Name)
         var SP95Value = document.createElement("div")
         SP95Value.id = "CARBURANTS_SP95_VALUE"
         SP95Value.textContent = "-.---"
@@ -84,16 +93,18 @@ Module.register("MMM-PrixCarburants", {
         var SP95Prix = document.createElement("div")
         SP95Prix.textContent = "€/l"
         SP95.appendChild(SP95Prix)
-        var SP95Dot = document.createElement("div")
-        SP95Dot.id = "CARBURANTS_SP95_DOT"
-        SP95Dot.className = "fa fa-circle"
-        SP95.appendChild(SP95Dot)
         prix.appendChild(SP95)
 
         var E85 = document.createElement("div")
         E85.id = "CARBURANTS_E85"
         E85.className= "CARBURANTS_hidden"
-        E85.textContent= "E85:"
+        var E85Dot = document.createElement("div")
+        E85Dot.id = "CARBURANTS_E85_DOT"
+        E85Dot.className = "fa fa-circle"
+        E85.appendChild(E85Dot)
+        var E85Name = document.createElement("div")
+        E85Name.textContent= "E85"
+        E85.appendChild(E85Name)
         var E85Value = document.createElement("div")
         E85Value.id = "CARBURANTS_E85_VALUE"
         E85Value.textContent = "-.---"
@@ -101,16 +112,18 @@ Module.register("MMM-PrixCarburants", {
         var E85Prix = document.createElement("div")
         E85Prix.textContent = "€/l"
         E85.appendChild(E85Prix)
-        var E85Dot = document.createElement("div")
-        E85Dot.id = "CARBURANTS_E85_DOT"
-        E85Dot.className = "fa fa-circle"
-        E85.appendChild(E85Dot)
         prix.appendChild(E85)
 
         var GPL = document.createElement("div")
         GPL.id = "CARBURANTS_GPL"
         GPL.className= "CARBURANTS_hidden"
-        GPL.textContent= "GPLc:"
+        var GPLDot = document.createElement("div")
+        GPLDot.id = "CARBURANTS_GPL_DOT"
+        GPLDot.className = "fa fa-circle"
+        GPL.appendChild(GPLDot)
+        var GPLName = document.createElement("div")
+        GPLName.textContent= "GPLc"
+        GPL.appendChild(GPLName)
         var GPLValue = document.createElement("div")
         GPLValue.id = "CARBURANTS_GPL_VALUE"
         GPLValue.textContent = "-.---"
@@ -118,16 +131,18 @@ Module.register("MMM-PrixCarburants", {
         var GPLPrix = document.createElement("div")
         GPLPrix.textContent = "€/l"
         GPL.appendChild(GPLPrix)
-        var GPLDot = document.createElement("div")
-        GPLDot.id = "CARBURANTS_GPL_DOT"
-        GPLDot.className = "fa fa-circle"
-        GPL.appendChild(GPLDot)
         prix.appendChild(GPL)
 
         var E10 = document.createElement("div")
         E10.id = "CARBURANTS_E10"
         E10.className= "CARBURANTS_hidden"
-        E10.textContent= "E10:"
+        var E10Dot = document.createElement("div")
+        E10Dot.id = "CARBURANTS_E10_DOT"
+        E10Dot.className = "fa fa-circle"
+        E10.appendChild(E10Dot)
+        var E10Name = document.createElement("div")
+        E10Name.textContent= "E10"
+        E10.appendChild(E10Name)
         var E10Value = document.createElement("div")
         E10Value.id = "CARBURANTS_E10_VALUE"
         E10Value.textContent = "-.---"
@@ -135,16 +150,18 @@ Module.register("MMM-PrixCarburants", {
         var E10Prix = document.createElement("div")
         E10Prix.textContent = "€/l"
         E10.appendChild(E10Prix)
-        var E10Dot = document.createElement("div")
-        E10Dot.id = "CARBURANTS_E10_DOT"
-        E10Dot.className = "fa fa-circle"
-        E10.appendChild(E10Dot)
         prix.appendChild(E10)
 
         var SP98 = document.createElement("div")
         SP98.id = "CARBURANTS_SP98"
         SP98.className= "CARBURANTS_hidden"
-        SP98.textContent= "SP98:"
+        var SP98Dot = document.createElement("div")
+        SP98Dot.id = "CARBURANTS_SP98_DOT"
+        SP98Dot.className = "fa fa-circle"
+        SP98.appendChild(SP98Dot)
+        var SP98Name = document.createElement("div")
+        SP98Name.textContent= "SP98"
+        SP98.appendChild(SP98Name)
         var SP98Value = document.createElement("div")
         SP98Value.id = "CARBURANTS_SP98_VALUE"
         SP98Value.textContent = "-.---"
@@ -152,10 +169,6 @@ Module.register("MMM-PrixCarburants", {
         var SP98Prix = document.createElement("div")
         SP98Prix.textContent = "€/l"
         SP98.appendChild(SP98Prix)
-        var SP98Dot = document.createElement("div")
-        SP98Dot.id = "CARBURANTS_SP98_DOT"
-        SP98Dot.className = "fa fa-circle"
-        SP98.appendChild(SP98Dot)
         prix.appendChild(SP98)
 
         if (carburant.prix.length) {
@@ -230,7 +243,7 @@ Module.register("MMM-PrixCarburants", {
     switch(noti) {
       case "DOM_OBJECTS_CREATED":
         if (this.config.debug) log = (...args) => { console.log("[CARBURANTS]", ...args) }
-        setTimeout(() => this.sendSocketNotification("INIT", this.config), 1000*30)
+        setTimeout(() => this.sendSocketNotification("INIT", this.config), this.config.dev ? 0 : 1000*30)
         break
     }
   },
@@ -239,7 +252,6 @@ Module.register("MMM-PrixCarburants", {
     var from = new Date(moment(date))
     var now = new Date()
     var diff = (now.getTime() - from.getTime()) / (1000*3600*24)
-    console.log(diff)
     if (diff <= 2) return "Green"
     else if (diff > 2 && diff <= 5) return "Yellow"
     else if (diff > 5 && diff <= 10) return "Red"
