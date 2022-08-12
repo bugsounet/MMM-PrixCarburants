@@ -37,7 +37,7 @@ Module.register("MMM-PrixCarburants", {
     var wrapper = document.createElement("div")
     wrapper.id = "CARBURANTS"
     if (!this.carburants.length) {
-      wrapper.innerHTML = this.translate("LOADING")
+      wrapper.innerHTML = "MMM-PrixCarburants " + this.translate("LOADING")
     }
     else {
       wrapper.innerHTML = ""
