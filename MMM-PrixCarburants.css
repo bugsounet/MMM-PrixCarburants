@@ -50,7 +50,7 @@
     align-self: center;
     font-size: 5px;
     color: darkred;
-    margin-left: 5px;
+    margin-right: 5px;
 }
 
 #CARBURANTS_SP95_DOT.Green,
@@ -59,7 +59,7 @@
 #CARBURANTS_E10_DOT.Green,
 #CARBURANTS_SP98_DOT.Green,
 #CARBURANTS_GAZOLE_DOT.Green {
-  color: green
+  color: green;
 }
 
 #CARBURANTS_SP95_DOT.Yellow,
@@ -68,7 +68,7 @@
 #CARBURANTS_E10_DOT.Yellow,
 #CARBURANTS_SP98_DOT.Yellow,
 #CARBURANTS_GAZOLE_DOT.Yellow {
-  color: yellow
+  color: yellow;
 }
 
 #CARBURANTS_SP95_DOT.Red,
@@ -77,7 +77,7 @@
 #CARBURANTS_E10_DOT.Red,
 #CARBURANTS_SP98_DOT.Red,
 #CARBURANTS_GAZOLE_DOT.Red {
-  color: red
+  color: red;
 }
 
 #CARBURANTS_SP95_DOT.Black,
