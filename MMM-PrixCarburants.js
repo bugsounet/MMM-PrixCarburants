@@ -41,9 +41,6 @@ Module.register("MMM-PrixCarburants", {
     }
     else {
       wrapper.innerHTML = ""
-      var background = document.createElement("div")
-      background.id = "CARBURANTS_BG"
-      wrapper.appendChild(background)
       this.carburants.forEach((carburant,nb) => {
         if (!carburant.nom || (nb > this.config.Affiche)) return
         var id = document.createElement("div")
@@ -70,6 +67,10 @@ Module.register("MMM-PrixCarburants", {
         var gazolePrix = document.createElement("div")
         gazolePrix.textContent = "€/l"
         gazole.appendChild(gazolePrix)
+        var gazoleDot = document.createElement("div")
+        gazoleDot.id = "CARBURANTS_GAZOLE_DOT"
+        gazoleDot.className = "fa fa-circle"
+        gazole.appendChild(gazoleDot)
         prix.appendChild(gazole)
 
         var SP95 = document.createElement("div")
@@ -83,6 +84,10 @@ Module.register("MMM-PrixCarburants", {
         var SP95Prix = document.createElement("div")
         SP95Prix.textContent = "€/l"
         SP95.appendChild(SP95Prix)
+        var SP95Dot = document.createElement("div")
+        SP95Dot.id = "CARBURANTS_SP95_DOT"
+        SP95Dot.className = "fa fa-circle"
+        SP95.appendChild(SP95Dot)
         prix.appendChild(SP95)
 
         var E85 = document.createElement("div")
@@ -96,6 +101,10 @@ Module.register("MMM-PrixCarburants", {
         var E85Prix = document.createElement("div")
         E85Prix.textContent = "€/l"
         E85.appendChild(E85Prix)
+        var E85Dot = document.createElement("div")
+        E85Dot.id = "CARBURANTS_E85_DOT"
+        E85Dot.className = "fa fa-circle"
+        E85.appendChild(E85Dot)
         prix.appendChild(E85)
 
         var GPL = document.createElement("div")
@@ -109,6 +118,10 @@ Module.register("MMM-PrixCarburants", {
         var GPLPrix = document.createElement("div")
         GPLPrix.textContent = "€/l"
         GPL.appendChild(GPLPrix)
+        var GPLDot = document.createElement("div")
+        GPLDot.id = "CARBURANTS_GPL_DOT"
+        GPLDot.className = "fa fa-circle"
+        GPL.appendChild(GPLDot)
         prix.appendChild(GPL)
 
         var E10 = document.createElement("div")
@@ -122,6 +135,10 @@ Module.register("MMM-PrixCarburants", {
         var E10Prix = document.createElement("div")
         E10Prix.textContent = "€/l"
         E10.appendChild(E10Prix)
+        var E10Dot = document.createElement("div")
+        E10Dot.id = "CARBURANTS_E10_DOT"
+        E10Dot.className = "fa fa-circle"
+        E10.appendChild(E10Dot)
         prix.appendChild(E10)
 
         var SP98 = document.createElement("div")
@@ -135,32 +152,42 @@ Module.register("MMM-PrixCarburants", {
         var SP98Prix = document.createElement("div")
         SP98Prix.textContent = "€/l"
         SP98.appendChild(SP98Prix)
+        var SP98Dot = document.createElement("div")
+        SP98Dot.id = "CARBURANTS_SP98_DOT"
+        SP98Dot.className = "fa fa-circle"
+        SP98.appendChild(SP98Dot)
         prix.appendChild(SP98)
 
         if (carburant.prix.length) {
           carburant.prix.forEach(type => {
             if (this.config.Carburants.indexOf(+type.id) > -1) {
               if (type.id == 1) {
+                gazoleDot.classList.add(this.fiability(type.maj))
                 gazoleValue.textContent = type.valeur
                 gazole.classList.remove("CARBURANTS_hidden")
               }
               if (type.id == 2) {
+                SP95Dot.classList.add(this.fiability(type.maj))
                 SP95Value.textContent = type.valeur
                 SP95.classList.remove("CARBURANTS_hidden")
               }
               if (type.id == 3) {
+                E85Dot.classList.add(this.fiability(type.maj))
                 E85Value.textContent = type.valeur
                 E85.classList.remove("CARBURANTS_hidden")
               }
               if (type.id == 4) {
+                GPLDot.classList.add(this.fiability(type.maj))
                 GPLValue.textContent = type.valeur
                 GPL.classList.remove("CARBURANTS_hidden")
               }
               if (type.id == 5) {
+                E10Dot.classList.add(this.fiability(type.maj))
                 E10Value.textContent = type.valeur
                 E10.classList.remove("CARBURANTS_hidden")
               }
               if (type.id == 6) {
+                SP98Dot.classList.add(this.fiability(type.maj))
                 SP98Value.textContent = type.valeur
                 SP98.classList.remove("CARBURANTS_hidden")
               }
@@ -183,7 +210,8 @@ Module.register("MMM-PrixCarburants", {
 
   getStyles: function () {
     return [
-      "MMM-PrixCarburants.css"
+      "MMM-PrixCarburants.css",
+      "font-awesome.css"
     ]
   },
 
@@ -202,8 +230,20 @@ Module.register("MMM-PrixCarburants", {
     switch(noti) {
       case "DOM_OBJECTS_CREATED":
         if (this.config.debug) log = (...args) => { console.log("[CARBURANTS]", ...args) }
-        setTimeout(() => this.sendSocketNotification("INIT", this.config),  1000*30)
+        setTimeout(() => this.sendSocketNotification("INIT", this.config), 0)// 1000*30)
         break
     }
+  },
+
+  fiability: function (date) {
+    var from = new Date(moment(date))
+    var now = new Date()
+    var diff = (now.getTime() - from.getTime()) / (1000*3600*24)
+    console.log(diff)
+    if (diff <= 2) return "Green"
+    else if (diff > 2 && diff <= 5) return "Yellow"
+    else if (diff > 5 && diff <= 10) return "Red"
+    else return "Black"
   }
+
 });
