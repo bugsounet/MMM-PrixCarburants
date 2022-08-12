@@ -36,18 +36,60 @@
   font-size: medium;
 }
 
-#CARBURANTS_BG {
-  position: absolute;
-  background-image: url(./data/logo/AUCUNE.png);
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center center;
-  filter: blur(10px) opacity(20%) grayscale(30%);
-  width: 100%;
-  height: 90%;
-}
-
 #CARBURANTS_UPDATE {
   font-size: xx-small;
   text-align: right;
+}
+
+#CARBURANTS_SP95_DOT,
+#CARBURANTS_E85_DOT,
+#CARBURANTS_GPL_DOT,
+#CARBURANTS_E10_DOT,
+#CARBURANTS_SP98_DOT,
+#CARBURANTS_GAZOLE_DOT {
+    align-self: center;
+    font-size: 5px;
+    color: darkred;
+    margin-left: 5px;
+}
+
+#CARBURANTS_SP95_DOT.Green,
+#CARBURANTS_E85_DOT.Green,
+#CARBURANTS_GPL_DOT.Green,
+#CARBURANTS_E10_DOT.Green,
+#CARBURANTS_SP98_DOT.Green,
+#CARBURANTS_GAZOLE_DOT.Green {
+  color: green
+}
+
+#CARBURANTS_SP95_DOT.Yellow,
+#CARBURANTS_E85_DOT.Yellow,
+#CARBURANTS_GPL_DOT.Yellow,
+#CARBURANTS_E10_DOT.Yellow,
+#CARBURANTS_SP98_DOT.Yellow,
+#CARBURANTS_GAZOLE_DOT.Yellow {
+  color: yellow
+}
+
+#CARBURANTS_SP95_DOT.Red,
+#CARBURANTS_E85_DOT.Red,
+#CARBURANTS_GPL_DOT.Red,
+#CARBURANTS_E10_DOT.Red,
+#CARBURANTS_SP98_DOT.Red,
+#CARBURANTS_GAZOLE_DOT.Red {
+  color: red
+}
+
+#CARBURANTS_SP95_DOT.Black,
+#CARBURANTS_E85_DOT.Black,
+#CARBURANTS_GPL_DOT.Black,
+#CARBURANTS_E10_DOT.Black,
+#CARBURANTS_SP98_DOT.Black,
+#CARBURANTS_GAZOLE_DOT.Black {
+  color: darkred;
+}
+
+#CARBURANTS_LOGO {
+  max-height: 100%;
+  width: 60px;
 }
