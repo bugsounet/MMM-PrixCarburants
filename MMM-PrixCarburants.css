@@ -49,7 +49,7 @@
 #CARBURANTS_GAZOLE_DOT {
     align-self: center;
     font-size: 5px;
-    color: darkred;
+    color: black;
     margin-right: 5px;
 }
 
@@ -86,7 +86,7 @@
 #CARBURANTS_E10_DOT.Black,
 #CARBURANTS_SP98_DOT.Black,
 #CARBURANTS_GAZOLE_DOT.Black {
-  color: darkred;
+  color: black;
 }
 
 #CARBURANTS_LOGO {
