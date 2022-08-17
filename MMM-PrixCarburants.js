@@ -178,31 +178,37 @@ Module.register("MMM-PrixCarburants", {
                 gazoleDot.classList.add(this.fiability(type.maj))
                 gazoleValue.textContent = type.valeur
                 gazole.classList.remove("CARBURANTS_hidden")
+                if (gazoleDot.classList.contains("Black")) gazoleValue.classList.add("stroked")
               }
               if (type.id == 2) {
                 SP95Dot.classList.add(this.fiability(type.maj))
                 SP95Value.textContent = type.valeur
                 SP95.classList.remove("CARBURANTS_hidden")
+                if (SP95Dot.classList.contains("Black")) SP95Value.classList.add("stroked")
               }
               if (type.id == 3) {
                 E85Dot.classList.add(this.fiability(type.maj))
                 E85Value.textContent = type.valeur
                 E85.classList.remove("CARBURANTS_hidden")
+                if (E85Dot.classList.contains("Black")) E85Value.classList.add("stroked")
               }
               if (type.id == 4) {
                 GPLDot.classList.add(this.fiability(type.maj))
                 GPLValue.textContent = type.valeur
                 GPL.classList.remove("CARBURANTS_hidden")
+                if (GPLDot.classList.contains("Black")) GPLValue.classList.add("stroked")
               }
               if (type.id == 5) {
                 E10Dot.classList.add(this.fiability(type.maj))
                 E10Value.textContent = type.valeur
                 E10.classList.remove("CARBURANTS_hidden")
+                if (E10Dot.classList.contains("Black")) E10Value.classList.add("stroked")
               }
               if (type.id == 6) {
                 SP98Dot.classList.add(this.fiability(type.maj))
                 SP98Value.textContent = type.valeur
                 SP98.classList.remove("CARBURANTS_hidden")
+                if (SP98Dot.classList.contains("Black")) SP98Value.classList.add("stroked")
               }
             }
           })
