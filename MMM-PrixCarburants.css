@@ -93,3 +93,12 @@
   max-height: 100%;
   width: 60px;
 }
+
+#CARBURANTS_SP95_VALUE.stroked,
+#CARBURANTS_E85_VALUE.stroked,
+#CARBURANTS_GPL_VALUE.stroked,
+#CARBURANTS_E10_VALUE.stroked,
+#CARBURANTS_SP98_VALUE.stroked,
+#CARBURANTS_GAZOLE_VALUE.stroked {
+  text-decoration: line-through;
+}
