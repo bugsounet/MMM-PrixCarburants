@@ -171,6 +171,12 @@ Module.register("MMM-PrixCarburants", {
         SP98.appendChild(SP98Prix)
         prix.appendChild(SP98)
 
+        var NOData = document.createElement("div")
+        NOData.id = "CARBURANTS_NODATA"
+        NOData.className= "CARBURANTS_hidden"
+        NOData.textContent = "Aucune Informations"
+        prix.appendChild(NOData)
+
         if (carburant.prix.length) {
           carburant.prix.forEach(type => {
             if (this.config.Carburants.indexOf(+type.id) > -1) {
@@ -212,6 +218,8 @@ Module.register("MMM-PrixCarburants", {
               }
             }
           })
+        } else {
+          NOData.classList.remove("CARBURANTS_hidden")
         }
         id.appendChild(logo)
         id.appendChild(info)
