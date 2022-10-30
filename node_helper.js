@@ -9,8 +9,7 @@ var NodeHelper = require("node_helper")
 var AdmZip = require('adm-zip')
 var request = require('request')
 var convert = require('xml-js');
-
-log = (...args) => { /* do nothing ! */ }
+var log = (...args) => { /* do nothing ! */ };
 
 module.exports = NodeHelper.create({
   start: function () {
