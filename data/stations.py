@@ -95,31 +95,33 @@ def main():
             html = session.get('https://www.prix-carburants.gouv.fr/recherche/?page=%s&limit=100' % page).text
             html_tree = BeautifulSoup(html,'lxml')
             try:
-                pages = len(html_tree.find_all(class_=re.compile('^paginationPage')))
+                # recherche nombre de pages
+                pages = len(html_tree.find_all(class_=re.compile('pagination__link')))-4
             except:
                 pages=1
 
             if page==1:
                 try:
-                    Listeh2 = html_tree.find_all('h3')
+                    Listeh2 = html_tree.find_all('h2')
                     nbstationdep = Listeh2[0].string.split(' ')[0]
                 except:
                     break
             
             # Boucle les donnees des stations
             for retour in html_tree.find_all(class_='data'):
-                dv = retour.find(class_='pdv-description')
-                td = dv.find_all(re.compile('span'))
+                #dv = retour.find(class_='pdv-description')
+                dv = retour.find(class_='title')
+                #td = dv.find_all(re.compile('span'))
+                row = retour.find(class_='fr-grid-row')
+                td = row.find_all(re.compile('span'))
                 NomMarque = dv.find('strong').string.split(' | ')
                 Adresse = td[len(td)-1].string.split(' ', 1)
-                
                 # Met en forme en retirant tous les accents et caracteres particuliers
                 StCommune = unidecode.unidecode(Adresse[1], "utf-8").upper()
                 StCP = Adresse[0]
                 StAdresse = unidecode.unidecode(td[len(td)-2].string, "utf-8")
                 StNom = unidecode.unidecode(NomMarque[0], "utf-8")
                 StMarque = unidecode.unidecode(NomMarque[1], "utf-8")
-                
                 # id, Commune, Code Postal, Adresse, Nom, Marque                
                 ListeStation.stations.append(Station(retour['id'], StCommune, StCP, StAdresse, StNom, StMarque))
                 
