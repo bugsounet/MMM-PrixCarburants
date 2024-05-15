@@ -1,11 +1,10 @@
-/* global Module */
-
-/* Magic Mirror
+/*
  * Module: MMM-PrixCarburants
  *
  * By bugsounet ©2024
  * MIT Licensed.
  */
+
 log = (...args) => { /* do nothing */ };
 
 Module.register("MMM-PrixCarburants", {
@@ -30,15 +29,14 @@ Module.register("MMM-PrixCarburants", {
 
   start () {
     this.carburants = [];
+    this.step = "1/7 - MMM-PrixCarburants est en attente de démarrage...";
   },
 
   getDom () {
     var updated = new Date().toLocaleDateString(config.language, { year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit" });
     var wrapper = document.createElement("div");
     wrapper.id = "CARBURANTS";
-    if (!this.carburants.length) {
-      wrapper.innerHTML = `MMM-PrixCarburants ${  this.translate("LOADING")}`;
-    }
+    if (!this.carburants.length) wrapper.innerHTML = this.step;
     else {
       wrapper.innerHTML = "";
       this.carburants.forEach((carburant,nb) => {
@@ -250,6 +248,11 @@ Module.register("MMM-PrixCarburants", {
           this.carburants = payload;
           this.updateDom(500);
         }
+        break;
+      case "STEP":
+        if (this.carburants.length) return;
+        this.step = payload;
+        this.updateDom();
         break;
     }
   },

@@ -1,7 +1,7 @@
-/* Magic Mirror
- * Node Helper: MMM-PrixCarburants
+/*
+ * Node_Helper: MMM-PrixCarburants
  *
- * By bugsounet ©2022
+ * By bugsounet ©2024
  * MIT Licensed.
  */
 
@@ -37,7 +37,8 @@ module.exports = NodeHelper.create({
     if (!this.config.CodePostaux.length) return console.error("[CARBURANTS] Manque CodePostaux !");
     else console.log(`[CARBURANTS] Recherche avec Code Postaux: ${this.config.CodePostaux.toString()}`);
     this.createStationsDB();
-    log("Création de la base de données...");
+    log("Création de la base de données Stations...");
+    this.sendSocketNotification("STEP", "2/7 - Création de la base de données Stations...");
     this.DownloadXML();
     setInterval(()=> {
       log("Mise à jour de la base de données...");
@@ -46,50 +47,6 @@ module.exports = NodeHelper.create({
     }, 1000 * 60 * 60);
   },
 
-  createDB () {
-    log("Create DataBase...");
-    const xmlToConvert = readFileSync(`${this.dataPath}/database/${this.fileXML}`, {
-      encoding: "UTF8"
-    });
-
-    const obj = convertXML(xmlToConvert);
-    
-    obj.pdv_liste.children.forEach((station) => {
-      this.config.CodePostaux.forEach((code) => {
-        if (station.pdv.cp === code) {
-          var ids = {
-            id: station.pdv.id,
-            nom: null,
-            ville: null,
-            marque: null,
-            logo: "AUCUNE.png",
-            prix: []
-          };
-          log(`Found id: ${station.pdv.id}`);
-          this.stationDB.stations.forEach((info) => {
-            if (station.pdv.id === info.id) {
-              log("Ville:", info.commune);
-              ids.ville = info.commune;
-              log("Marque:", info.marque);
-              ids.marque = info.marque;
-              log("Nom:", info.nom);
-              ids.nom = info.nom;
-              ids.logo = `${info.marque.replace(" ", "").toUpperCase()}.png`;
-            }
-          });
-          station.pdv.children.forEach((info) => {
-            if (info.prix) {
-              log("Prix:", info.prix);
-              ids.prix.push(info.prix);
-            }
-          });
-          if (ids.ville) this.carburants.push(ids);
-          log("---");
-        }
-      });
-    });
-  },
-  
   createStationsDB () {
     var tempDB= {
       stations: []
@@ -143,7 +100,8 @@ module.exports = NodeHelper.create({
         fetch(url)
           .then((response) => {
             if (response.ok && response.body) {
-              log("Downloading Database File...");
+              log("Téléchargement de la base de données des prix...");
+              this.sendSocketNotification("STEP", "3/7 - Téléchargement de la base de données des prix...");
               let writer = createWriteStream(`${this.dataPath}/download.zip`);
               const readable = Readable.fromWeb(response.body);
               var write = readable.pipe(writer);
@@ -155,7 +113,8 @@ module.exports = NodeHelper.create({
                 log(`Received ${chunk.length} bytes of data.`);
               });
               readable.on("end", () => {
-                log("Download Done.");
+                log("Téléchargement Terminé.");
+                this.sendSocketNotification("STEP", "4/7 - Téléchargement Terminé.");
                 resolve(`${this.dataPath}/download.zip`);
               });
             } else {
@@ -173,6 +132,7 @@ module.exports = NodeHelper.create({
     var unzip = (file) => {
       return new Promise((resolve, reject) => {
         log(`UnZip ${file}...`);
+        this.sendSocketNotification("STEP", `5/7 - UnZip ${this.fileXML}...`);
         unzipper.Open.file(`${file}`)
           .then((directory) => {
             var XMLFile = directory.files.filter((file) => { return file.path === this.fileXML; })[0];
@@ -186,6 +146,7 @@ module.exports = NodeHelper.create({
                 })
                 .on("finish", ()=> {
                   log("UnZip Done.");
+                  this.sendSocketNotification("STEP", "6/7 - Décompression Terminée.");
                   resolve();
                 });
             } else {
@@ -202,5 +163,50 @@ module.exports = NodeHelper.create({
 
     return download(url)
       .then(unzip);
+  },
+
+  createDB () {
+    log("Création de la base de données Affichage...");
+    this.sendSocketNotification("STEP", "7/7 - Création de la base de données Affichage...");
+    const xmlToConvert = readFileSync(`${this.dataPath}/database/${this.fileXML}`, {
+      encoding: "UTF8"
+    });
+
+    const obj = convertXML(xmlToConvert);
+    
+    obj.pdv_liste.children.forEach((station) => {
+      this.config.CodePostaux.forEach((code) => {
+        if (station.pdv.cp === code) {
+          var ids = {
+            id: station.pdv.id,
+            nom: null,
+            ville: null,
+            marque: null,
+            logo: "AUCUNE.png",
+            prix: []
+          };
+          log(`Found id: ${station.pdv.id}`);
+          this.stationDB.stations.forEach((info) => {
+            if (station.pdv.id === info.id) {
+              log("Ville:", info.commune);
+              ids.ville = info.commune;
+              log("Marque:", info.marque);
+              ids.marque = info.marque;
+              log("Nom:", info.nom);
+              ids.nom = info.nom;
+              ids.logo = `${info.marque.replace(" ", "").toUpperCase()}.png`;
+            }
+          });
+          station.pdv.children.forEach((info) => {
+            if (info.prix) {
+              log("Prix:", info.prix);
+              ids.prix.push(info.prix);
+            }
+          });
+          if (ids.ville) this.carburants.push(ids);
+          log("---");
+        }
+      });
+    });
   }
 });
