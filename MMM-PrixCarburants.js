@@ -29,7 +29,7 @@ Module.register("MMM-PrixCarburants", {
 
   start () {
     this.carburants = [];
-    this.step = "1/7 - MMM-PrixCarburants est en attente de démarrage...";
+    this.step = "MMM-PrixCarburants est en attente de démarrage...";
   },
 
   getDom () {
@@ -252,7 +252,7 @@ Module.register("MMM-PrixCarburants", {
       case "STEP":
         if (this.carburants.length) return;
         this.step = payload;
-        this.updateDom();
+        this.updateDom(500);
         break;
     }
   },
@@ -261,7 +261,11 @@ Module.register("MMM-PrixCarburants", {
     switch(noti) {
       case "DOM_OBJECTS_CREATED":
         if (this.config.debug) log = (...args) => { console.log("[CARBURANTS]", ...args); };
-        setTimeout(() => this.sendSocketNotification("INIT", this.config), this.config.dev ? 0 : 1000*30);
+        setTimeout(() => {
+          this.step = `MMM-PrixCarburants ${this.translate("LOADING")}`;
+          this.updateDom();
+          this.sendSocketNotification("INIT", this.config);
+        }, this.config.dev ? 0 : 1000*30);
         break;
     }
   },

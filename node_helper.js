@@ -38,7 +38,6 @@ module.exports = NodeHelper.create({
     else console.log(`[CARBURANTS] Recherche avec Code Postaux: ${this.config.CodePostaux.toString()}`);
     this.createStationsDB();
     log("Création de la base de données Stations...");
-    this.sendSocketNotification("STEP", "2/7 - Création de la base de données Stations...");
     this.DownloadXML();
     setInterval(()=> {
       log("Mise à jour de la base de données...");
@@ -101,7 +100,6 @@ module.exports = NodeHelper.create({
           .then((response) => {
             if (response.ok && response.body) {
               log("Téléchargement de la base de données des prix...");
-              this.sendSocketNotification("STEP", "3/7 - Téléchargement de la base de données des prix...");
               let writer = createWriteStream(`${this.dataPath}/download.zip`);
               const readable = Readable.fromWeb(response.body);
               var write = readable.pipe(writer);
@@ -114,7 +112,6 @@ module.exports = NodeHelper.create({
               });
               readable.on("end", () => {
                 log("Téléchargement Terminé.");
-                this.sendSocketNotification("STEP", "4/7 - Téléchargement Terminé.");
                 resolve(`${this.dataPath}/download.zip`);
               });
             } else {
@@ -131,8 +128,7 @@ module.exports = NodeHelper.create({
 
     var unzip = (file) => {
       return new Promise((resolve, reject) => {
-        log(`UnZip ${file}...`);
-        this.sendSocketNotification("STEP", `5/7 - UnZip ${this.fileXML}...`);
+        log(`Décompression ${file}...`);
         unzipper.Open.file(`${file}`)
           .then((directory) => {
             var XMLFile = directory.files.filter((file) => { return file.path === this.fileXML; })[0];
@@ -145,8 +141,7 @@ module.exports = NodeHelper.create({
                   reject("ERROR");
                 })
                 .on("finish", ()=> {
-                  log("UnZip Done.");
-                  this.sendSocketNotification("STEP", "6/7 - Décompression Terminée.");
+                  log("Décompression Terminée.");
                   resolve();
                 });
             } else {
@@ -167,7 +162,6 @@ module.exports = NodeHelper.create({
 
   createDB () {
     log("Création de la base de données Affichage...");
-    this.sendSocketNotification("STEP", "7/7 - Création de la base de données Affichage...");
     const xmlToConvert = readFileSync(`${this.dataPath}/database/${this.fileXML}`, {
       encoding: "UTF8"
     });
@@ -185,7 +179,7 @@ module.exports = NodeHelper.create({
             logo: "AUCUNE.png",
             prix: []
           };
-          log(`Found id: ${station.pdv.id}`);
+          log(`id: ${station.pdv.id}`);
           this.stationDB.stations.forEach((info) => {
             if (station.pdv.id === info.id) {
               log("Ville:", info.commune);
