@@ -32,7 +32,7 @@
 #CARBURANTS {
   text-align: left;
   flex-direction: column;
-  display: flex;
+  display: inline-flex;
   font-size: medium;
 }
 

@@ -23,7 +23,8 @@ Module.register("MMM-PrixCarburants", {
       6  // SP98
     ],
     Affiche: 5, // nombre de station a afficher
-    width: "450px" // largeur du module
+    width: "450px", // largeur du module
+    startDelay: 1000 * 30 // delai avant le démarrage
   },
   requiresVersion: "2.27.0",
 
@@ -265,7 +266,7 @@ Module.register("MMM-PrixCarburants", {
           this.step = `MMM-PrixCarburants ${this.translate("LOADING")}`;
           this.updateDom();
           this.sendSocketNotification("INIT", this.config);
-        }, this.config.dev ? 0 : 1000*30);
+        }, this.config.startDelay);
         break;
     }
   },
