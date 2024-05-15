@@ -22,7 +22,7 @@ npm install
   position: "top_center",
   config: {
     debug: false,
-    CodePostaux: [ //
+    CodePostaux: [
       "08320",
       "59610"
     ],
@@ -44,9 +44,9 @@ npm install
 | Option | Description | Type | Défaut |
 | --- | ---- | ----- | ---- |
 | CodePostaux | Permets de scanner les stations selon les codes postaux | Tableau de code postaux | [ "08320", "59610" ] |
-| Carburants | Permet d'afficher uniquement le type de carburant voulu. Commenter ou supprimer le type de carburant(s) ce que vous ne voulez pas voir | Tableau de valeur | [ 1,2,3,4,5,6] |
+| Carburants | Permet d'afficher uniquement le type de carburant voulu.<br>Type de Carburant:<br>* 1: Gazole<br>* 2: SP95<br>* 3: E85<br>* 4: GPLc<br>* 5: E10<br>* 6: SP98<br>  | Tableau de valeur | [ 1,2,3,4,5,6 ] |
 | Affiche | Nombre maximum de stations à afficher | Nombre | 5 |
-| width | Largeur du module (pour ajuster si besoin) | chaine de caractère  | 450px |
+| width | Largeur du module (pour ajuster si besoin) | chaine de caractère  | "450px" |
 | startDelay | Delai avant le démarrage du module en ms (30 sec par default --conseillé--) | Nombre | 30000
 
 ## Mise à jour du module
