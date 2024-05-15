@@ -3,7 +3,7 @@
 /* Magic Mirror
  * Module: MMM-PrixCarburants
  *
- * By bugsounet ©2022
+ * By bugsounet ©2024
  * MIT Licensed.
  */
 log = (...args) => { /* do nothing */ }
@@ -26,7 +26,7 @@ Module.register("MMM-PrixCarburants", {
     Affiche: 5, // nombre de station a afficher
     width: "450px" // largeur du module
   },
-  requiresVersion: "2.18.0",
+  requiresVersion: "2.27.0",
 
   start: function() {
     this.carburants = []
@@ -49,10 +49,11 @@ Module.register("MMM-PrixCarburants", {
         id.style.width= this.config.width
         var logo = document.createElement("IMG")
         logo.id = "CARBURANTS_LOGO"
-        logo.src = "/modules/MMM-PrixCarburants/data/logo/"+ carburant.logo
+        logo.src = this.file(`data/logo/${carburant.logo}`)
+        logo.addEventListener("error", () => { logo.src = this.file("data/logo/AUCUNE.png"); }, false);
         var info = document.createElement("div")
         info.id = "CARBURANTS_INFO"
-        info.textContent = carburant.marque + " ("+carburant.ville+")"
+        info.textContent = `${carburant.marque} (${carburant.ville})`
         var prix = document.createElement("div")
         prix.id= "CARBURANTS_PRIX"
 
@@ -228,7 +229,7 @@ Module.register("MMM-PrixCarburants", {
       })
       var lastUpdate = document.createElement("div")
       lastUpdate.id = "CARBURANTS_UPDATE"
-      lastUpdate.textContent = "Mise à jour le " + updated
+      lastUpdate.textContent = `Mise à jour le ${updated}`
       wrapper.appendChild(lastUpdate)
     }
 
@@ -266,9 +267,9 @@ Module.register("MMM-PrixCarburants", {
     var from = new Date(moment(date))
     var now = new Date()
     var diff = (now.getTime() - from.getTime()) / (1000*3600*24)
-    if (diff <= 2) return "Green"
-    else if (diff > 2 && diff <= 5) return "Yellow"
-    else if (diff > 5 && diff <= 10) return "Red"
+    if (diff <= 5) return "Green"
+    else if (diff > 5 && diff <= 8) return "Yellow"
+    else if (diff > 8 && diff <= 15) return "Red"
     else return "Black"
   }
 
