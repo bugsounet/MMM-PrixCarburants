@@ -1,6 +1,6 @@
 {
   "name": "MMM-PrixCarburants",
-  "version": "1.0.6",
+  "version": "2.0.0",
   "description": "Affiche le prix des carburants sur MagicMirror",
   "main": "MMM-PrixCarburants.js",
   "author": "@bugsounet",
@@ -11,7 +11,7 @@
     "update": "installer/update.sh"
   },
   "dependencies": {
-    "adm-zip": "^0.5.9",
-    "xml-js": "^1.6.11"
+    "simple-xml-to-json": "^1.2.2",
+    "unzipper": "^0.11.6"
   }
 }

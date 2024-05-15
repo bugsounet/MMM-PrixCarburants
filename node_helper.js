@@ -8,9 +8,9 @@
 var NodeHelper = require("node_helper")
 const { createWriteStream , readFileSync } = require("node:fs");
 const { Readable } = require("node:stream");
+const unzipper = require('unzipper');
+const { convertXML } = require('simple-xml-to-json')
 
-var AdmZip = require('adm-zip')
-var convert = require('xml-js');
 var log = (...args) => { /* do nothing ! */ };
 
 module.exports = NodeHelper.create({
@@ -18,6 +18,8 @@ module.exports = NodeHelper.create({
     this.carburants = []
     this.stationsDB = {}
     this.departement = []
+    this.dataPath = `${__dirname}/data`
+    this.fileXML = "PrixCarburants_instantane.xml"
   },
 
   socketNotificationReceived: function (noti, payload) {
@@ -44,36 +46,41 @@ module.exports = NodeHelper.create({
     }, 1000 * 60 * 60)
   },
 
-  createDB: function(data) {
-    var result = convert.xml2json(data, {compact: false, spaces: 2})
-    const obj = JSON.parse(result)
-    obj.elements[0].elements.forEach(pdv => {
+  createDB: function() {
+    log("Create DataBase...")
+    const xmlToConvert = readFileSync(`${this.dataPath}/database/${this.fileXML}`, {
+        encoding: 'UTF8'
+    })
+
+    const obj = convertXML(xmlToConvert)
+    
+    obj.pdv_liste.children.forEach(station => {
       this.config.CodePostaux.forEach(code => {
-        if (pdv.attributes.cp == code) {
+        if (station.pdv.cp == code) {
           var ids = {
-            id: pdv.attributes.id,
+            id: station.pdv.id,
             nom: null,
             ville: null,
             marque: null,
             logo: "AUCUNE.png",
             prix: [],
           }
-          log(`Found id: ${pdv.attributes.id}`)
+          log(`Found id: ${station.pdv.id}`)
           this.stationDB.stations.forEach(info => {
-            if (pdv.attributes.id == info.id) {
+            if (station.pdv.id == info.id) {
               log("Ville:", info.commune)
               ids.ville = info.commune
               log("Marque:", info.marque)
               ids.marque = info.marque
-              log("Nom", info.nom)
+              log("Nom:", info.nom)
               ids.nom = info.nom
               ids.logo = `${info.marque.replace(' ', '').toUpperCase()}.png`
             }
           })
-          pdv.elements.forEach(info => {
-            if (info.name == "prix") {
-              log("Prix:", info.attributes)
-              ids.prix.push(info.attributes)
+          station.pdv.children.forEach(info => {
+            if (info.prix) {
+              log("Prix:", info.prix)
+              ids.prix.push(info.prix)
             }
           })
           if (ids.ville) this.carburants.push(ids)
@@ -119,10 +126,10 @@ module.exports = NodeHelper.create({
   },
 
   DownloadXML: function() {
-    this.downloadAndUnzip('https://donnees.roulez-eco.fr/opendata/instantane', 'PrixCarburants_instantane.xml')
+    this.downloadAndUnzip('https://donnees.roulez-eco.fr/opendata/instantane')
     .then(data => {
       this.createDB(data)
-      log("DataBase:", this.carburants)
+      log("DataBase created:", this.carburants)
       if (this.carburants.length) this.sendSocketNotification("DATA", this.carburants)
     })
     .catch(function (err) {
@@ -130,22 +137,14 @@ module.exports = NodeHelper.create({
     })
   },
 
-  downloadAndUnzip: function (url, fileName) {
-    /**
-     * Download a file
-     * 
-     * @param url
-     */
-
-    var dataPath = `${__dirname}/data`
-    var download = function (url) {
-      return new Promise(function (resolve, reject) {
-
+  downloadAndUnzip: function (url) {
+    var download = (url) => {
+      return new Promise((resolve, reject) => {
         fetch(url)
           .then((response) => {
             if (response.ok && response.body) {
-              console.log("[CARBURANTS] Downloading Database File...")
-              let writer = createWriteStream(`${dataPath}/download.zip`);
+              log("Downloading Database File...")
+              let writer = createWriteStream(`${this.dataPath}/download.zip`);
               const readable = Readable.fromWeb(response.body)
               var write = readable.pipe(writer);
               readable.on('error', (error) => {
@@ -153,11 +152,11 @@ module.exports = NodeHelper.create({
                 reject("Download Error")
               });
               readable.on('data', (chunk) => {
-                console.log(`[CARBURANTS] Received ${chunk.length} bytes of data.`);
+                log(`Received ${chunk.length} bytes of data.`);
               });
               readable.on('end', () => {
-                console.log("[CARBURANTS] Download Done.");
-                resolve()
+                log("Download Done.");
+                resolve(`${this.dataPath}/download.zip`)
               });
             } else {
               console.error("[CARBURANTS] Error", response.status, response.statusText)
@@ -171,32 +170,37 @@ module.exports = NodeHelper.create({
       })
     }
 
-    /**
-     * Unzip a Buffer
-     * 
-     * @param buffer
-     * @returns {Promise}
-     */
-     var unzip = function (buffer) {
-       return new Promise(function (resolve, reject) {
-         console.log("[CARBURANTS] Unzip...")
-         var dataPath = `${__dirname}/data`
-         var resolved = false;
-         var zip = new AdmZip(`${dataPath}/download.zip`);
-         var zipEntries = zip.getEntries(); // an array of ZipEntry records
-
-         zipEntries.forEach(function (zipEntry) {
-           if (zipEntry.entryName == fileName) {
-             resolved = true
-             console.log("[CARBURANTS] Send Data...")
-             resolve(zipEntry.getData().toString('utf8'))
-           }
-         })
-
-         if (!resolved) reject(new Error(`No file found in archive: ${fileName}`))
+    var unzip = (file) => {
+      return new Promise((resolve, reject) => {
+        log(`UnZip ${file}...`)
+        unzipper.Open.file(`${file}`)
+          .then(directory => {
+            var XMLFile = directory.files.filter(file => { return file.path === this.fileXML })[0]
+            if (XMLFile) {
+              XMLFile
+                .stream()
+                .pipe(createWriteStream(`${this.dataPath}/database/${this.fileXML}`))
+                .on('error', (err) => {
+                  console.error("[CARBURANTS]", err)
+                  reject("ERROR")
+                })
+                .on('finish', ()=> {
+                  log("UnZip Done.")
+                  resolve()
+                })
+            } else {
+              console.error(`[CARBURANTS] UnZip -- file not found: ${this.fileXML}`)
+              reject(`file not found: ${this.fileXML}`)
+            }
+          })
+          .catch(err => {
+            console.error("[CARBURANTS] UnZip Error:", err)
+            reject("UnZip ERROR")
+          });
        })
-     }
-     return download(url)
-       .then(unzip);
+    }
+
+    return download(url)
+      .then(unzip);
   }
 });
