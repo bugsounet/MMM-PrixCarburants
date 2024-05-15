@@ -1,6 +1,7 @@
 {
   "name": "MMM-PrixCarburants",
   "version": "2.0.0",
+  "rev": "240516",
   "description": "Affiche le prix des carburants sur MagicMirror",
   "main": "MMM-PrixCarburants.js",
   "author": "bugsounet",
