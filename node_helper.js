@@ -5,200 +5,200 @@
  * MIT Licensed.
  */
 
-var NodeHelper = require("node_helper")
 const { createWriteStream , readFileSync } = require("node:fs");
 const { Readable } = require("node:stream");
-const unzipper = require('unzipper');
-const { convertXML } = require('simple-xml-to-json')
+var NodeHelper = require("node_helper");
+const unzipper = require("unzipper");
+const { convertXML } = require("simple-xml-to-json");
 
 var log = (...args) => { /* do nothing ! */ };
 
 module.exports = NodeHelper.create({
-  start: function () {
-    this.carburants = []
-    this.stationsDB = {}
-    this.departement = []
-    this.dataPath = `${__dirname}/data`
-    this.fileXML = "PrixCarburants_instantane.xml"
+  start () {
+    this.carburants = [];
+    this.stationsDB = {};
+    this.departement = [];
+    this.dataPath = `${__dirname}/data`;
+    this.fileXML = "PrixCarburants_instantane.xml";
   },
 
-  socketNotificationReceived: function (noti, payload) {
+  socketNotificationReceived (noti, payload) {
     switch (noti) {
       case "INIT":
-        console.log(`[CARBURANTS] MMM-PrixCarburants Version: ${require('./package.json').version}`)
-        this.initialize(payload)
-      break
+        console.log(`[CARBURANTS] MMM-PrixCarburants Version: ${require("./package.json").version}`);
+        this.initialize(payload);
+        break;
     }
   },
 
-  initialize: function (config) {
-    this.config = config
-    if (this.config.debug) log = (...args) => { console.log("[CARBURANTS]", ...args) }
-    if (!this.config.CodePostaux.length) return console.error("[CARBURANTS] Manque CodePostaux !")
-    else console.log(`[CARBURANTS] Recherche avec Code Postaux: ${this.config.CodePostaux.toString()}`)
-    this.createStationsDB()
-    log("Création de la base de données...")
-    this.DownloadXML()
+  initialize (config) {
+    this.config = config;
+    if (this.config.debug) log = (...args) => { console.log("[CARBURANTS]", ...args); };
+    if (!this.config.CodePostaux.length) return console.error("[CARBURANTS] Manque CodePostaux !");
+    else console.log(`[CARBURANTS] Recherche avec Code Postaux: ${this.config.CodePostaux.toString()}`);
+    this.createStationsDB();
+    log("Création de la base de données...");
+    this.DownloadXML();
     setInterval(()=> {
-      log("Mise à jour de la base de données...")
-      this.carburants = [] 
-      this.DownloadXML()
-    }, 1000 * 60 * 60)
+      log("Mise à jour de la base de données...");
+      this.carburants = []; 
+      this.DownloadXML();
+    }, 1000 * 60 * 60);
   },
 
-  createDB: function() {
-    log("Create DataBase...")
+  createDB () {
+    log("Create DataBase...");
     const xmlToConvert = readFileSync(`${this.dataPath}/database/${this.fileXML}`, {
-        encoding: 'UTF8'
-    })
+      encoding: "UTF8"
+    });
 
-    const obj = convertXML(xmlToConvert)
+    const obj = convertXML(xmlToConvert);
     
-    obj.pdv_liste.children.forEach(station => {
-      this.config.CodePostaux.forEach(code => {
-        if (station.pdv.cp == code) {
+    obj.pdv_liste.children.forEach((station) => {
+      this.config.CodePostaux.forEach((code) => {
+        if (station.pdv.cp === code) {
           var ids = {
             id: station.pdv.id,
             nom: null,
             ville: null,
             marque: null,
             logo: "AUCUNE.png",
-            prix: [],
-          }
-          log(`Found id: ${station.pdv.id}`)
-          this.stationDB.stations.forEach(info => {
-            if (station.pdv.id == info.id) {
-              log("Ville:", info.commune)
-              ids.ville = info.commune
-              log("Marque:", info.marque)
-              ids.marque = info.marque
-              log("Nom:", info.nom)
-              ids.nom = info.nom
-              ids.logo = `${info.marque.replace(' ', '').toUpperCase()}.png`
+            prix: []
+          };
+          log(`Found id: ${station.pdv.id}`);
+          this.stationDB.stations.forEach((info) => {
+            if (station.pdv.id === info.id) {
+              log("Ville:", info.commune);
+              ids.ville = info.commune;
+              log("Marque:", info.marque);
+              ids.marque = info.marque;
+              log("Nom:", info.nom);
+              ids.nom = info.nom;
+              ids.logo = `${info.marque.replace(" ", "").toUpperCase()}.png`;
             }
-          })
-          station.pdv.children.forEach(info => {
+          });
+          station.pdv.children.forEach((info) => {
             if (info.prix) {
-              log("Prix:", info.prix)
-              ids.prix.push(info.prix)
+              log("Prix:", info.prix);
+              ids.prix.push(info.prix);
             }
-          })
-          if (ids.ville) this.carburants.push(ids)
-          log("---")
+          });
+          if (ids.ville) this.carburants.push(ids);
+          log("---");
         }
-      })
-    })
+      });
+    });
   },
   
-  createStationsDB: function() {
+  createStationsDB () {
     var tempDB= {
       stations: []
-    }
-    this.config.CodePostaux.forEach(code => {
-      if (code.startsWith('0')) {
-        let departement = code.substring(2,1)
-        if (this.departement.indexOf(departement) > -1) return
-        log(`Chargement des stations du département 0${departement}`)
-        let temp = require(`./data/listestations/stations${departement}.json`).stations
-        tempDB.stations = tempDB.stations.concat(temp)
-        this.departement.push(departement)
+    };
+    this.config.CodePostaux.forEach((code) => {
+      if (code.startsWith("0")) {
+        let departement = code.substring(2,1);
+        if (this.departement.indexOf(departement) > -1) return;
+        log(`Chargement des stations du département 0${departement}`);
+        let temp = require(`./data/listestations/stations${departement}.json`).stations;
+        tempDB.stations = tempDB.stations.concat(temp);
+        this.departement.push(departement);
       }
-      else if (code.substring(0,2) == "20") {
-        let departement = 20
-        if (this.departement.indexOf(departement) > -1) return
-        log("Chargement des stations de la Corsica!")
-        let temp1 = require('./data/listestations/stations2A.json').stations
-        let temp2 = require('./data/listestations/stations2B.json').stations
-        let temp = temp1.concat(temp2)
-        tempDB.stations = tempDB.stations.concat(temp)
-        this.departement.push(departement)
+      else if (code.substring(0,2) === "20") {
+        let departement = 20;
+        if (this.departement.indexOf(departement) > -1) return;
+        log("Chargement des stations de la Corsica!");
+        let temp1 = require("./data/listestations/stations2A.json").stations;
+        let temp2 = require("./data/listestations/stations2B.json").stations;
+        let temp = temp1.concat(temp2);
+        tempDB.stations = tempDB.stations.concat(temp);
+        this.departement.push(departement);
       }
       else {
-        let departement = code.substring(0,2)
-        if (this.departement.indexOf(departement) > -1) return
-        log(`Chargement des stations du département ${departement}`)
-        let temp = require(`./data/listestations/stations${departement}.json`).stations
-        tempDB.stations = tempDB.stations.concat(temp)
-        this.departement.push(departement)
+        let departement = code.substring(0,2);
+        if (this.departement.indexOf(departement) > -1) return;
+        log(`Chargement des stations du département ${departement}`);
+        let temp = require(`./data/listestations/stations${departement}.json`).stations;
+        tempDB.stations = tempDB.stations.concat(temp);
+        this.departement.push(departement);
       }
-    })
-    this.stationDB = tempDB
+    });
+    this.stationDB = tempDB;
   },
 
-  DownloadXML: function() {
-    this.downloadAndUnzip('https://donnees.roulez-eco.fr/opendata/instantane')
-    .then(data => {
-      this.createDB(data)
-      log("DataBase created:", this.carburants)
-      if (this.carburants.length) this.sendSocketNotification("DATA", this.carburants)
-    })
-    .catch(function (err) {
-      console.error("[CARBURANTS]", err)
-    })
+  DownloadXML () {
+    this.downloadAndUnzip("https://donnees.roulez-eco.fr/opendata/instantane")
+      .then((data) => {
+        this.createDB(data);
+        log("DataBase created:", this.carburants);
+        if (this.carburants.length) this.sendSocketNotification("DATA", this.carburants);
+      })
+      .catch(function (err) {
+        console.error("[CARBURANTS]", err);
+      });
   },
 
-  downloadAndUnzip: function (url) {
+  downloadAndUnzip (url) {
     var download = (url) => {
       return new Promise((resolve, reject) => {
         fetch(url)
           .then((response) => {
             if (response.ok && response.body) {
-              log("Downloading Database File...")
+              log("Downloading Database File...");
               let writer = createWriteStream(`${this.dataPath}/download.zip`);
-              const readable = Readable.fromWeb(response.body)
+              const readable = Readable.fromWeb(response.body);
               var write = readable.pipe(writer);
-              readable.on('error', (error) => {
+              readable.on("error", (error) => {
                 console.error("[CARBURANTS] Download Error:", error);
-                reject("Download Error")
+                reject("Download Error");
               });
-              readable.on('data', (chunk) => {
+              readable.on("data", (chunk) => {
                 log(`Received ${chunk.length} bytes of data.`);
               });
-              readable.on('end', () => {
+              readable.on("end", () => {
                 log("Download Done.");
-                resolve(`${this.dataPath}/download.zip`)
+                resolve(`${this.dataPath}/download.zip`);
               });
             } else {
-              console.error("[CARBURANTS] Error", response.status, response.statusText)
-              reject(`Download Error: ${response.status} ${response.statusText}`)
+              console.error("[CARBURANTS] Error", response.status, response.statusText);
+              reject(`Download Error: ${response.status} ${response.statusText}`);
             }
           })
           .catch ((error) => {
-            console.error("[CARBURANTS] Download Error:", error)
-            reject(`Download Error: ${error.message}`)
-          })
-      })
-    }
+            console.error("[CARBURANTS] Download Error:", error);
+            reject(`Download Error: ${error.message}`);
+          });
+      });
+    };
 
     var unzip = (file) => {
       return new Promise((resolve, reject) => {
-        log(`UnZip ${file}...`)
+        log(`UnZip ${file}...`);
         unzipper.Open.file(`${file}`)
-          .then(directory => {
-            var XMLFile = directory.files.filter(file => { return file.path === this.fileXML })[0]
+          .then((directory) => {
+            var XMLFile = directory.files.filter((file) => { return file.path === this.fileXML; })[0];
             if (XMLFile) {
               XMLFile
                 .stream()
                 .pipe(createWriteStream(`${this.dataPath}/database/${this.fileXML}`))
-                .on('error', (err) => {
-                  console.error("[CARBURANTS]", err)
-                  reject("ERROR")
+                .on("error", (err) => {
+                  console.error("[CARBURANTS]", err);
+                  reject("ERROR");
                 })
-                .on('finish', ()=> {
-                  log("UnZip Done.")
-                  resolve()
-                })
+                .on("finish", ()=> {
+                  log("UnZip Done.");
+                  resolve();
+                });
             } else {
-              console.error(`[CARBURANTS] UnZip -- file not found: ${this.fileXML}`)
-              reject(`file not found: ${this.fileXML}`)
+              console.error(`[CARBURANTS] UnZip -- file not found: ${this.fileXML}`);
+              reject(`file not found: ${this.fileXML}`);
             }
           })
-          .catch(err => {
-            console.error("[CARBURANTS] UnZip Error:", err)
-            reject("UnZip ERROR")
+          .catch((err) => {
+            console.error("[CARBURANTS] UnZip Error:", err);
+            reject("UnZip ERROR");
           });
-       })
-    }
+      });
+    };
 
     return download(url)
       .then(unzip);
