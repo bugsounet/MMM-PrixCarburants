@@ -16,7 +16,7 @@ npm install
 
 ## Configuration
 
-```
+```js
 {
   module: "MMM-PrixCarburants",
   position: "top_center",
@@ -52,7 +52,7 @@ npm install
 ## Mise à jour du module
 ### Mise à jour manuelle
 Utilisez cette commande depuis un terminal:
-```
+```sh
 cd ~/MagicMirror/modules/MMM-PrixCarburants
 npm run update
 ```
