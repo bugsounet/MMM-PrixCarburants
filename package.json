@@ -1,18 +1,44 @@
 {
   "name": "MMM-PrixCarburants",
-  "version": "1.0.6",
+  "version": "2.0.0",
+  "rev": "240516",
   "description": "Affiche le prix des carburants sur MagicMirror",
   "main": "MMM-PrixCarburants.js",
-  "author": "@bugsounet",
+  "author": "bugsounet",
   "license": "MIT",
   "scripts": {
     "preinstall": "installer/preinstall.sh",
-    "postinstall": "installer/postinstall.sh",
-    "update": "installer/update.sh"
+    "postinstall": "installer/postinstall.sh -m",
+    "update": "installer/update.sh",
+    "reset": "git reset --hard",
+    "clean": "rm -rf node_modules package-lock.json",
+    "lint": "eslint *.js installer/*.js --config eslint.config.js",
+    "lint:fix": "eslint *.js installer/*.js --config eslint.config.js --fix",
+    "test": "npm run lint",
+    "test:minify": "cd installer && node minify.js"
   },
+  "keywords": [
+    "magic mirror",
+    "french",
+    "carburant"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "bugs": {
+    "url": "https://github.com/bugsounet/MMM-PrixCarburants"
+  },
+  "homepage": "https://github.com/bugsounet/MMM-PrixCarburants",
   "dependencies": {
-    "adm-zip": "^0.5.9",
-    "request": "^2.88.2",
-    "xml-js": "^1.6.11"
+    "esbuild": "^0.21.2",
+    "glob": "^10.3.15",
+    "simple-xml-to-json": "^1.2.2",
+    "unzipper": "^0.11.6"
+  },
+  "devDependencies": {
+    "@eslint/js": "^8.57.0",
+    "@stylistic/eslint-plugin": "^1.8.0",
+    "eslint": "^8.57.0",
+    "eslint-plugin-import": "^2.29.1"
   }
 }
