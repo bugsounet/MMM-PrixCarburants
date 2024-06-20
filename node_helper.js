@@ -25,7 +25,7 @@ module.exports = NodeHelper.create({
   socketNotificationReceived (noti, payload) {
     switch (noti) {
       case "INIT":
-        console.log(`[CARBURANTS] MMM-PrixCarburants EXT-RadioPlayer Version: ${require("./package.json").version} rev: ${require("./package.json").rev}`);
+        console.log(`[CARBURANTS] MMM-PrixCarburants Version: ${require("./package.json").version} rev: ${require("./package.json").rev}`);
         this.initialize(payload);
         break;
     }
