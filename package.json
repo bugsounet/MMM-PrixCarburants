@@ -1,7 +1,7 @@
 {
   "name": "MMM-PrixCarburants",
-  "version": "2.0.2",
-  "rev": "240620",
+  "version": "2.1.0",
+  "rev": "240701",
   "description": "Affiche le prix des carburants sur MagicMirror",
   "main": "MMM-PrixCarburants.js",
   "author": "bugsounet",
@@ -37,7 +37,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^8.57.0",
-    "@stylistic/eslint-plugin": "1.8.1",
+    "@stylistic/eslint-plugin": "^1.8.1",
     "eslint": "^8.57.0",
     "eslint-plugin-import": "^2.29.1"
   }
