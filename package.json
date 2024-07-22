@@ -31,7 +31,7 @@
   "homepage": "https://github.com/bugsounet/MMM-PrixCarburants",
   "dependencies": {
     "esbuild": "^0.23.0",
-    "glob": "^10.4.3",
+    "glob": "^10.4.5",
     "simple-xml-to-json": "^1.2.2",
     "unzipper": "^0.12.2"
   },
