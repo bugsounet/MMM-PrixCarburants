@@ -5,8 +5,6 @@
  * MIT Licensed.
  */
 
-log = (...args) => { /* do nothing */ };
-
 Module.register("MMM-PrixCarburants", {
   defaults: {
     debug: false,
@@ -20,7 +18,7 @@ Module.register("MMM-PrixCarburants", {
       3, // E85
       4, // GPLc
       5, // E10
-      6  // SP98
+      6 // SP98
     ],
     Affiche: 5, // nombre de station a afficher
     width: "450px", // largeur du module
@@ -40,12 +38,12 @@ Module.register("MMM-PrixCarburants", {
     if (!this.carburants.length) wrapper.innerHTML = this.step;
     else {
       wrapper.innerHTML = "";
-      this.carburants.forEach((carburant,nb) => {
+      this.carburants.forEach((carburant, nb) => {
         if (!carburant.nom || (nb > this.config.Affiche)) return;
         var id = document.createElement("div");
         id.id = "CARBURANTS_ID";
         id.className = carburant.id;
-        id.style.width= this.config.width;
+        id.style.width = this.config.width;
         var logo = document.createElement("IMG");
         logo.id = "CARBURANTS_LOGO";
         logo.src = this.file(`data/logo/${carburant.logo}`);
@@ -54,18 +52,18 @@ Module.register("MMM-PrixCarburants", {
         info.id = "CARBURANTS_INFO";
         info.textContent = `${carburant.marque} (${carburant.ville})`;
         var prix = document.createElement("div");
-        prix.id= "CARBURANTS_PRIX";
+        prix.id = "CARBURANTS_PRIX";
 
         var gazole = document.createElement("div");
         gazole.id = "CARBURANTS_GAZOLE";
-        gazole.className= "CARBURANTS_hidden";
+        gazole.className = "CARBURANTS_hidden";
         prix.appendChild(gazole);
         var gazoleDot = document.createElement("div");
         gazoleDot.id = "CARBURANTS_GAZOLE_DOT";
         gazoleDot.className = "fa fa-circle";
         gazole.appendChild(gazoleDot);
         var gazoleName = document.createElement("div");
-        gazoleName.textContent= "Gazole";
+        gazoleName.textContent = "Gazole";
         gazole.appendChild(gazoleName);
         var gazoleValue = document.createElement("div");
         gazoleValue.id = "CARBURANTS_GAZOLE_VALUE";
@@ -78,13 +76,13 @@ Module.register("MMM-PrixCarburants", {
 
         var SP95 = document.createElement("div");
         SP95.id = "CARBURANTS_SP95";
-        SP95.className= "CARBURANTS_hidden";
+        SP95.className = "CARBURANTS_hidden";
         var SP95Dot = document.createElement("div");
         SP95Dot.id = "CARBURANTS_SP95_DOT";
         SP95Dot.className = "fa fa-circle";
         SP95.appendChild(SP95Dot);
         var SP95Name = document.createElement("div");
-        SP95Name.textContent= "SP95";
+        SP95Name.textContent = "SP95";
         SP95.appendChild(SP95Name);
         var SP95Value = document.createElement("div");
         SP95Value.id = "CARBURANTS_SP95_VALUE";
@@ -97,13 +95,13 @@ Module.register("MMM-PrixCarburants", {
 
         var E85 = document.createElement("div");
         E85.id = "CARBURANTS_E85";
-        E85.className= "CARBURANTS_hidden";
+        E85.className = "CARBURANTS_hidden";
         var E85Dot = document.createElement("div");
         E85Dot.id = "CARBURANTS_E85_DOT";
         E85Dot.className = "fa fa-circle";
         E85.appendChild(E85Dot);
         var E85Name = document.createElement("div");
-        E85Name.textContent= "E85";
+        E85Name.textContent = "E85";
         E85.appendChild(E85Name);
         var E85Value = document.createElement("div");
         E85Value.id = "CARBURANTS_E85_VALUE";
@@ -116,13 +114,13 @@ Module.register("MMM-PrixCarburants", {
 
         var GPL = document.createElement("div");
         GPL.id = "CARBURANTS_GPL";
-        GPL.className= "CARBURANTS_hidden";
+        GPL.className = "CARBURANTS_hidden";
         var GPLDot = document.createElement("div");
         GPLDot.id = "CARBURANTS_GPL_DOT";
         GPLDot.className = "fa fa-circle";
         GPL.appendChild(GPLDot);
         var GPLName = document.createElement("div");
-        GPLName.textContent= "GPLc";
+        GPLName.textContent = "GPLc";
         GPL.appendChild(GPLName);
         var GPLValue = document.createElement("div");
         GPLValue.id = "CARBURANTS_GPL_VALUE";
@@ -135,13 +133,13 @@ Module.register("MMM-PrixCarburants", {
 
         var E10 = document.createElement("div");
         E10.id = "CARBURANTS_E10";
-        E10.className= "CARBURANTS_hidden";
+        E10.className = "CARBURANTS_hidden";
         var E10Dot = document.createElement("div");
         E10Dot.id = "CARBURANTS_E10_DOT";
         E10Dot.className = "fa fa-circle";
         E10.appendChild(E10Dot);
         var E10Name = document.createElement("div");
-        E10Name.textContent= "E10";
+        E10Name.textContent = "E10";
         E10.appendChild(E10Name);
         var E10Value = document.createElement("div");
         E10Value.id = "CARBURANTS_E10_VALUE";
@@ -154,13 +152,13 @@ Module.register("MMM-PrixCarburants", {
 
         var SP98 = document.createElement("div");
         SP98.id = "CARBURANTS_SP98";
-        SP98.className= "CARBURANTS_hidden";
+        SP98.className = "CARBURANTS_hidden";
         var SP98Dot = document.createElement("div");
         SP98Dot.id = "CARBURANTS_SP98_DOT";
         SP98Dot.className = "fa fa-circle";
         SP98.appendChild(SP98Dot);
         var SP98Name = document.createElement("div");
-        SP98Name.textContent= "SP98";
+        SP98Name.textContent = "SP98";
         SP98.appendChild(SP98Name);
         var SP98Value = document.createElement("div");
         SP98Value.id = "CARBURANTS_SP98_VALUE";
@@ -173,7 +171,7 @@ Module.register("MMM-PrixCarburants", {
 
         var NOData = document.createElement("div");
         NOData.id = "CARBURANTS_NODATA";
-        NOData.className= "CARBURANTS_hidden";
+        NOData.className = "CARBURANTS_hidden";
         NOData.textContent = "Aucune Informations";
         prix.appendChild(NOData);
 
@@ -243,7 +241,7 @@ Module.register("MMM-PrixCarburants", {
   },
 
   socketNotificationReceived (noti, payload) {
-    switch(noti) {
+    switch (noti) {
       case "DATA":
         if (payload.length) {
           this.carburants = payload;
@@ -258,10 +256,9 @@ Module.register("MMM-PrixCarburants", {
     }
   },
 
-  notificationReceived (noti, payload) {
-    switch(noti) {
+  notificationReceived (noti) {
+    switch (noti) {
       case "DOM_OBJECTS_CREATED":
-        if (this.config.debug) log = (...args) => { console.log("[CARBURANTS]", ...args); };
         setTimeout(() => {
           this.step = `MMM-PrixCarburants ${this.translate("LOADING")}`;
           this.updateDom();
@@ -274,7 +271,7 @@ Module.register("MMM-PrixCarburants", {
   fiability (date) {
     var from = new Date(moment(date));
     var now = new Date();
-    var diff = (now.getTime() - from.getTime()) / (1000*3600*24);
+    var diff = (now.getTime() - from.getTime()) / (1000 * 3600 * 24);
     if (diff <= 5) return "Green";
     else if (diff > 5 && diff <= 8) return "Yellow";
     else if (diff > 8 && diff <= 15) return "Red";
