@@ -5,13 +5,13 @@
  * MIT Licensed.
  */
 
-const { createWriteStream , readFileSync } = require("node:fs");
+const { createWriteStream, readFileSync } = require("node:fs");
 const { Readable } = require("node:stream");
 var NodeHelper = require("node_helper");
 const unzipper = require("unzipper");
 const { convertXML } = require("simple-xml-to-json");
 
-var log = (...args) => { /* do nothing ! */ };
+var log = () => { /* do nothing ! */ };
 
 module.exports = NodeHelper.create({
   start () {
@@ -39,27 +39,27 @@ module.exports = NodeHelper.create({
     this.createStationsDB();
     log("Création de la base de données Stations...");
     this.DownloadXML();
-    setInterval(()=> {
+    setInterval(() => {
       log("Mise à jour de la base de données...");
-      this.carburants = []; 
+      this.carburants = [];
       this.DownloadXML();
     }, 1000 * 60 * 60);
   },
 
   createStationsDB () {
-    var tempDB= {
+    var tempDB = {
       stations: []
     };
     this.config.CodePostaux.forEach((code) => {
       if (code.startsWith("0")) {
-        let departement = code.substring(2,1);
+        let departement = code.substring(2, 1);
         if (this.departement.indexOf(departement) > -1) return;
         log(`Chargement des stations du département 0${departement}`);
         let temp = require(`./data/listestations/stations${departement}.json`).stations;
         tempDB.stations = tempDB.stations.concat(temp);
         this.departement.push(departement);
       }
-      else if (code.substring(0,2) === "20") {
+      else if (code.substring(0, 2) === "20") {
         let departement = 20;
         if (this.departement.indexOf(departement) > -1) return;
         log("Chargement des stations de la Corsica!");
@@ -70,7 +70,7 @@ module.exports = NodeHelper.create({
         this.departement.push(departement);
       }
       else {
-        let departement = code.substring(0,2);
+        let departement = code.substring(0, 2);
         if (this.departement.indexOf(departement) > -1) return;
         log(`Chargement des stations du département ${departement}`);
         let temp = require(`./data/listestations/stations${departement}.json`).stations;
@@ -102,7 +102,7 @@ module.exports = NodeHelper.create({
               log("Téléchargement de la base de données des prix...");
               let writer = createWriteStream(`${this.dataPath}/download.zip`);
               const readable = Readable.fromWeb(response.body);
-              var write = readable.pipe(writer);
+              readable.pipe(writer);
               readable.on("error", (error) => {
                 console.error("[CARBURANTS] Download Error:", error);
                 reject("Download Error");
@@ -119,7 +119,7 @@ module.exports = NodeHelper.create({
               reject(`Download Error: ${response.status} ${response.statusText}`);
             }
           })
-          .catch ((error) => {
+          .catch((error) => {
             console.error("[CARBURANTS] Download Error:", error);
             reject(`Download Error: ${error.message}`);
           });
@@ -140,7 +140,7 @@ module.exports = NodeHelper.create({
                   console.error("[CARBURANTS]", err);
                   reject("ERROR");
                 })
-                .on("finish", ()=> {
+                .on("finish", () => {
                   log("Décompression Terminée.");
                   resolve();
                 });
@@ -167,7 +167,7 @@ module.exports = NodeHelper.create({
     });
 
     const obj = convertXML(xmlToConvert);
-    
+
     obj.pdv_liste.children.forEach((station) => {
       this.config.CodePostaux.forEach((code) => {
         if (station.pdv.cp === code) {
