@@ -32,7 +32,7 @@ Module.register("MMM-PrixCarburants", {
   },
 
   getDom () {
-    var updated = new Date().toLocaleDateString(config.language, { year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit" });
+    var updated = new Date(Date.now()).toLocaleDateString(config.language, { year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit" });
     var wrapper = document.createElement("div");
     wrapper.id = "CARBURANTS";
     if (!this.carburants.length) wrapper.innerHTML = this.step;
@@ -182,37 +182,37 @@ Module.register("MMM-PrixCarburants", {
                 gazoleDot.classList.add(this.fiability(type.maj));
                 gazoleValue.textContent = type.valeur;
                 gazole.classList.remove("CARBURANTS_hidden");
-                if (gazoleDot.classList.contains("Black")) gazoleValue.classList.add("stroked");
+                //if (gazoleDot.classList.contains("Black")) gazoleValue.classList.add("stroked");
               }
               if (type.id === "2") {
                 SP95Dot.classList.add(this.fiability(type.maj));
                 SP95Value.textContent = type.valeur;
                 SP95.classList.remove("CARBURANTS_hidden");
-                if (SP95Dot.classList.contains("Black")) SP95Value.classList.add("stroked");
+                //if (SP95Dot.classList.contains("Black")) SP95Value.classList.add("stroked");
               }
               if (type.id === "3") {
                 E85Dot.classList.add(this.fiability(type.maj));
                 E85Value.textContent = type.valeur;
                 E85.classList.remove("CARBURANTS_hidden");
-                if (E85Dot.classList.contains("Black")) E85Value.classList.add("stroked");
+                //if (E85Dot.classList.contains("Black")) E85Value.classList.add("stroked");
               }
               if (type.id === "4") {
                 GPLDot.classList.add(this.fiability(type.maj));
                 GPLValue.textContent = type.valeur;
                 GPL.classList.remove("CARBURANTS_hidden");
-                if (GPLDot.classList.contains("Black")) GPLValue.classList.add("stroked");
+                //if (GPLDot.classList.contains("Black")) GPLValue.classList.add("stroked");
               }
               if (type.id === "5") {
                 E10Dot.classList.add(this.fiability(type.maj));
                 E10Value.textContent = type.valeur;
                 E10.classList.remove("CARBURANTS_hidden");
-                if (E10Dot.classList.contains("Black")) E10Value.classList.add("stroked");
+                //if (E10Dot.classList.contains("Black")) E10Value.classList.add("stroked");
               }
               if (type.id === "6") {
                 SP98Dot.classList.add(this.fiability(type.maj));
                 SP98Value.textContent = type.valeur;
                 SP98.classList.remove("CARBURANTS_hidden");
-                if (SP98Dot.classList.contains("Black")) SP98Value.classList.add("stroked");
+                //if (SP98Dot.classList.contains("Black")) SP98Value.classList.add("stroked");
               }
             }
           });
@@ -270,7 +270,7 @@ Module.register("MMM-PrixCarburants", {
 
   fiability (date) {
     var from = new Date(moment(date));
-    var now = new Date();
+    var now = new Date(Date.now());
     var diff = (now.getTime() - from.getTime()) / (1000 * 3600 * 24);
     if (diff <= 5) return "Green";
     else if (diff > 5 && diff <= 8) return "Yellow";

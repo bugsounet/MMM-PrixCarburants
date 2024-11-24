@@ -1,7 +1,7 @@
 {
   "name": "MMM-PrixCarburants",
-  "version": "2.1.1",
-  "rev": "241120",
+  "version": "2.1.2",
+  "rev": "241124",
   "description": "Affiche le prix des carburants sur MagicMirror",
   "main": "MMM-PrixCarburants.js",
   "author": "bugsounet",
@@ -29,6 +29,10 @@
     "url": "https://github.com/bugsounet/MMM-PrixCarburants"
   },
   "homepage": "https://github.com/bugsounet/MMM-PrixCarburants",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bugsounet/MMM-PrixCarburants"
+  },
   "dependencies": {
     "esbuild": "^0.24.0",
     "glob": "^11.0.0",
