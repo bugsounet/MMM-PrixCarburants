@@ -20,6 +20,7 @@
   "main": "MMM-PrixCarburants.js",
   "scripts": {
     "clean": "rm -rf node_modules package-lock.json",
+    "database": "cd data && python stations.py",
     "dev": "cd installer && node dev.js",
     "dev:src": "cd installer && node src.js",
     "lint": "eslint . --config eslint.config.mjs",
