@@ -1,3 +1,5 @@
 /node_modules/
 /data/database/PrixCarburants_instantane.xml
 /data/download.zip
+/MMM-PrixCarburants.js
+/node_helper.js
