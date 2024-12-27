@@ -78,6 +78,17 @@ module.exports = NodeHelper.create({
         this.departement.push(departement);
       }
     });
+    if (this.config.ignores.length) {
+      let tempIgnore = tempDB;
+      tempIgnore.stations.forEach((station, id) => {
+        this.config.ignores.forEach((ignore) => {
+          if ((station.cp === ignore.cp) && (station.commune === ignore.ville) && (station.marque === ignore.station)) {
+            log(`[ignore] ${station.cp} ${station.commune}: ${station.marque}`);
+            delete tempDB.stations[id];
+          }
+        });
+      });
+    }
     this.stationDB = tempDB;
   },
 

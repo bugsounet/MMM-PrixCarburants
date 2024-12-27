@@ -12,6 +12,22 @@ Module.register("MMM-PrixCarburants", {
       "08320",
       "59610"
     ],
+    ignores: [
+
+      /*
+      {
+        cp: "08320",
+        ville: "HIERGES",
+        station: "FIOUL SERVICE"
+      },
+      {
+        cp: "59610",
+        ville: "FOURMIES",
+        station: "Carrefour"
+      }
+      */
+
+    ],
     Carburants: [
       1, // Gazole
       2, // SP95
