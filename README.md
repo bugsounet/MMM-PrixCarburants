@@ -26,6 +26,20 @@ npm install
       "08320",
       "59610"
     ],
+    ignores: [
+      /** Exemple de stations à ignorer
+      {
+        cp: "08320",
+        ville: "HIERGES",
+        station: "FIOUL SERVICE"
+      },
+      {
+        cp: "59610",
+        ville: "FOURMIES",
+        station: "Carrefour"
+      }
+      **/
+    ],
     Carburants: [
       1, // Gazole
       2, // SP95
@@ -44,6 +58,7 @@ npm install
 | Option | Description | Type | Défaut |
 | --- | ---- | ----- | ---- |
 | CodePostaux | Permets de scanner les stations selon les codes postaux | Tableau de code postaux | [ "08320", "59610" ] |
+| ignores | Permets d'ignorer des stations afin de ne pas les afficher | Tableau d'object de station à ignorer | [] |
 | Carburants | Permet d'afficher uniquement le type de carburant voulu.<br>Type de Carburant:<br>* 1: Gazole<br>* 2: SP95<br>* 3: E85<br>* 4: GPLc<br>* 5: E10<br>* 6: SP98<br>  | Tableau de valeur | [ 1,2,3,4,5,6 ] |
 | Affiche | Nombre maximum de stations à afficher | Nombre | 5 |
 | width | Largeur du module (pour ajuster si besoin) | chaine de caractère  | "450px" |
