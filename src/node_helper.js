@@ -35,7 +35,11 @@ module.exports = NodeHelper.create({
     this.config = config;
     if (this.config.debug) log = (...args) => { console.log("[CARBURANTS]", ...args); };
     if (!this.config.CodePostaux.length) return console.error("[CARBURANTS] Manque CodePostaux !");
-    else console.log(`[CARBURANTS] Recherche avec Code Postaux: ${this.config.CodePostaux.toString()}`);
+    else {
+      // remove duplicate value in CodePostaux
+      this.config.CodePostaux = [...new Set(this.config.CodePostaux)];
+      console.log(`[CARBURANTS] Recherche avec Code Postaux: ${this.config.CodePostaux.toString()}`);
+    }
     this.createStationsDB();
     log("Création de la base de données Stations...");
     this.DownloadXML();
@@ -83,7 +87,7 @@ module.exports = NodeHelper.create({
       tempIgnore.stations.forEach((station, id) => {
         this.config.ignores.forEach((ignore) => {
           if ((station.cp === ignore.cp) && (station.commune === ignore.ville) && (station.marque === ignore.station)) {
-            log(`[ignore] ${station.cp} ${station.commune}: ${station.marque}`);
+            log(`[Ignore] ${station.cp} ${station.commune}: ${station.marque}`);
             delete tempDB.stations[id];
           }
         });
@@ -96,6 +100,8 @@ module.exports = NodeHelper.create({
     this.downloadAndUnzip("https://donnees.roulez-eco.fr/opendata/instantane")
       .then((data) => {
         this.createDB(data);
+        //sort by ville
+        this.carburants.sort((a, b) => ((a.ville > b.ville) ? 1 : ((b.ville > a.ville) ? -1 : 0)));
         log("DataBase created:", this.carburants);
         if (this.carburants.length) this.sendSocketNotification("DATA", this.carburants);
       })
