@@ -100,8 +100,8 @@ module.exports = NodeHelper.create({
     this.downloadAndUnzip("https://donnees.roulez-eco.fr/opendata/instantane")
       .then((data) => {
         this.createDB(data);
-        //sort by ville
-        this.carburants.sort((a, b) => ((a.ville > b.ville) ? 1 : ((b.ville > a.ville) ? -1 : 0)));
+        //sort by ville then by marque
+        this.carburants.sort((a, b) => (a.ville.localeCompare(b.ville) || a.marque.localeCompare(b.marque)));
         log("DataBase created:", this.carburants);
         if (this.carburants.length) this.sendSocketNotification("DATA", this.carburants);
       })
